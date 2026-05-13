@@ -1,0 +1,366 @@
+:root {
+  --navy: #111f6a;
+  --electric: #000000;
+  --white: #ffffff;
+  --carousel-image-h: 60vh;
+  --carousel-caption-space: 40px;
+}
+
+/* Self-host Saans from ./fonts (OTF). Prefer WOFF2 later for perf. */
+@font-face {
+  font-family: "Saans";
+  src: url("./fonts/Saans-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Saans";
+  src: url("./fonts/Saans-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Saans";
+  src: url("./fonts/Saans-SemiBold.otf") format("opentype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #090A0F;
+  color: var(--white);
+  overflow: hidden;
+  font-family: "Saans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Inter, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+.cover-stage {
+  position: relative;
+  height: 100dvh;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 44px 0;
+  box-sizing: border-box;
+  background: #090A0F;
+}
+
+
+.headline-item {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  height: min(640px, calc(100dvh - 330px));
+}
+
+.headline {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-size: 54px;
+  line-height: 1;
+  letter-spacing: -2.56px;
+  color: #e5e5e5;
+}
+
+.headline-name {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.headline-title {
+  font-weight: 400;
+  width: 720px;
+  white-space: normal;
+}
+
+/* Scrollable strip (like carterandrew.com) */
+.strip-wrap {
+  position: relative;
+  flex: 1 1 calc(var(--carousel-image-h) + var(--carousel-caption-space));
+}
+
+.strip {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.strip::before {
+  content: "";
+  flex: 0 0 32px;
+  width: 32px;
+  height: 1px;
+}
+
+.strip.strip--no-start-inset::before {
+  display: none;
+}
+
+.strip::-webkit-scrollbar {
+  display: none;
+}
+
+.strip-next {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: 0;
+  background: transparent;
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  z-index: 3;
+  mix-blend-mode: difference;
+}
+
+.strip-next::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+.strip-next:hover {
+}
+
+.strip-next:hover::before {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.strip-next:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.55);
+  outline-offset: 3px;
+}
+
+.preview {
+  flex: 0 0 auto;
+  margin: 0;
+  width: auto;
+}
+
+.preview img,
+.preview video {
+  height: min(640px, calc(100dvh - 330px));
+  width: auto;
+  aspect-ratio: 830 / 640;
+  display: block;
+  object-fit: cover;
+  border-radius: 4px;
+  background: transparent;
+}
+
+.preview-label {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.12;
+  letter-spacing: 0.16px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.text-block {
+  position: relative;
+  margin: 0;
+  margin-top: auto;
+  width: 100%;
+  padding-top: 40px;
+  padding-left: 44px;
+  padding-right: 44px;
+  display: flex;
+  gap: 80px;
+  align-items: flex-start;
+}
+
+.logo-lockup {
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: 0.7px;
+  line-height: 1.12;
+  font-size: 70px;
+  white-space: nowrap;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.logo-ex {
+  font-size: 56px;
+  line-height: 56px;
+  letter-spacing: 0.56px;
+  transform: translateY(-3px);
+}
+
+.logo-mark {
+  height: 52px;
+  width: auto;
+  display: block;
+}
+
+.text-left {
+  flex: 1 1 auto;
+  max-width: 486px;
+}
+
+.copy {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.16;
+  letter-spacing: 0.16px;
+  color: #e5e5e5;
+}
+
+.copy p {
+  margin: 0 0 10px;
+}
+.copy p:last-child {
+  margin-bottom: 0;
+}
+
+.meta {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 24px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.16;
+  letter-spacing: 0.16px;
+  color: #e5e5e5;
+  flex-shrink: 0;
+}
+
+.contact {
+  margin-top: 44px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.16;
+  letter-spacing: 0.16px;
+  color: #e5e5e5;
+}
+
+.contact-link {
+  color: var(--white);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(255, 255, 255, 0.4);
+}
+
+.contact-link:hover {
+  text-decoration-color: var(--white);
+}
+
+@media (max-width: 1100px) {
+  .cover-stage {
+    height: 100dvh;
+  }
+  .preview {
+    position: relative;
+    width: min(670px, 100%);
+    height: auto;
+  }
+  .preview img {
+    width: 100%;
+    height: auto;
+  }
+  .preview video {
+    width: 100%;
+    height: auto;
+  }
+  .strip-wrap {
+    position: relative;
+    height: auto;
+    flex: 1 1 auto;
+    padding: 0;
+  }
+  .strip {
+    position: relative;
+    inset: auto;
+    padding: 0;
+  }
+  .strip-next {
+    display: grid;
+    right: 0;
+  }
+  .text-block {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: auto;
+    margin: 0;
+    margin-top: auto;
+    padding: 16px 20px 24px;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .text-left {
+    max-width: 100%;
+  }
+  .logo-lockup {
+    font-size: clamp(44px, 9vw, 70px);
+    white-space: normal;
+  }
+  .logo-ex {
+    font-size: 44px;
+    line-height: 44px;
+    letter-spacing: 0.44px;
+  }
+  .logo-mark {
+    height: 40px;
+  }
+  .cover-stage::after {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* no animated scrolling */
+  .cover-stage {
+    animation: none;
+  }
+}
