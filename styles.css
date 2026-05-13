@@ -296,36 +296,62 @@ select {
 }
 
 @media (max-width: 1100px) {
+  body {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
   .cover-stage {
-    height: 100dvh;
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+    padding: 24px 0;
+  }
+  .headline-item {
+    width: 100%;
+    height: auto;
+    padding: 0 20px;
+  }
+  .headline {
+    gap: 12px;
+    font-size: 42px;
+  }
+  .headline-title {
+    width: 100%;
+    max-width: 740px;
   }
   .preview {
     position: relative;
-    width: min(670px, 100%);
-    height: auto;
-  }
-  .preview img {
     width: 100%;
     height: auto;
+    padding: 0 20px;
   }
+  .preview img,
   .preview video {
     width: 100%;
     height: auto;
+    max-width: 100%;
+    aspect-ratio: auto;
   }
   .strip-wrap {
     position: relative;
     height: auto;
-    flex: 1 1 auto;
+    flex: 0 0 auto;
     padding: 0;
   }
   .strip {
     position: relative;
     inset: auto;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 24px;
     padding: 0;
+    overflow: visible;
+  }
+  .strip::before {
+    display: none;
   }
   .strip-next {
-    display: grid;
-    right: 0;
+    display: none;
   }
   .text-block {
     position: relative;
@@ -340,6 +366,24 @@ select {
   }
   .text-left {
     max-width: 100%;
+    display: contents;
+  }
+  .copy {
+    order: 1;
+  }
+  .meta {
+    order: 2;
+    gap: 12px;
+  }
+  .contact {
+    order: 3;
+    margin-top: 0;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .contact-cta {
+    width: 100%;
   }
   .logo-lockup {
     font-size: clamp(44px, 9vw, 70px);
