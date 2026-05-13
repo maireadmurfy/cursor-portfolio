@@ -2,13 +2,20 @@ function initStrip() {
   const strip = document.querySelector("[data-strip]");
   const next = document.querySelector("[data-strip-next]");
   if (!strip || !next) return;
+  const mobileLayout = window.matchMedia("(max-width: 1100px)");
 
   const syncStartInset = () => {
+    if (mobileLayout.matches) {
+      strip.classList.add("strip--no-start-inset");
+      return;
+    }
+
     const atStart = strip.scrollLeft <= 0;
     strip.classList.toggle("strip--no-start-inset", !atStart);
   };
 
   next.addEventListener("click", () => {
+    if (mobileLayout.matches) return;
     const amount = Math.max(320, Math.round(strip.clientWidth * 0.7));
     strip.scrollBy({ left: amount, behavior: "smooth" });
   });
@@ -17,6 +24,7 @@ function initStrip() {
   strip.addEventListener(
     "wheel",
     (e) => {
+      if (mobileLayout.matches) return;
       if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
       e.preventDefault();
       strip.scrollLeft += e.deltaY;
@@ -104,7 +112,7 @@ function initVisiblePreviewPlayback() {
       }
     },
     {
-      root: strip,
+      root: null,
       threshold: [0, resetThreshold, visibilityThreshold, 0.9],
     }
   );
