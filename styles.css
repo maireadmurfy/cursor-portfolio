@@ -97,7 +97,8 @@ select {
 
 .headline-title {
   font-weight: 400;
-  width: 720px;
+  width: 620px;
+  line-height: 58px;
   white-space: normal;
 }
 
@@ -128,48 +129,66 @@ select {
   height: 1px;
 }
 
-.strip.strip--no-start-inset::before {
-  display: none;
-}
-
 .strip::-webkit-scrollbar {
   display: none;
 }
 
+.strip-prev,
 .strip-next {
   position: absolute;
-  right: 0;
-  top: 50%;
+  top: calc(min(640px, calc(100dvh - 330px)) / 2);
   transform: translateY(-50%);
   width: 26px;
   height: 26px;
   border-radius: 999px;
   border: 0;
   background: transparent;
-  color: #ffffff;
   display: grid;
   place-items: center;
   cursor: pointer;
   z-index: 3;
-  mix-blend-mode: difference;
+  padding: 0;
+  transition: transform 160ms ease, opacity 160ms ease;
 }
 
-.strip-next::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  pointer-events: none;
+.strip-prev {
+  left: 20px;
 }
 
+.strip-next {
+  right: 20px;
+}
+
+.strip-prev[hidden],
+.strip-next[hidden] {
+  display: none;
+}
+
+.strip-prev img,
+.strip-next img {
+  display: block;
+  width: 26px;
+  height: 26px;
+  filter: drop-shadow(0 1px 8px rgba(0, 0, 0, 0.18));
+  transition: filter 160ms ease;
+}
+
+.strip-prev img {
+  transform: rotate(180deg);
+}
+
+.strip-prev:hover,
 .strip-next:hover {
+  transform: translateY(-50%) scale(1.03);
+  opacity: 1;
 }
 
-.strip-next:hover::before {
-  background: rgba(255, 255, 255, 0.14);
+.strip-prev:hover img,
+.strip-next:hover img {
+  filter: drop-shadow(0 1px 10px rgba(0, 0, 0, 0.22));
 }
 
+.strip-prev:focus-visible,
 .strip-next:focus-visible {
   outline: 3px solid rgba(255, 255, 255, 0.55);
   outline-offset: 3px;
@@ -263,7 +282,7 @@ select {
   padding: 0;
   margin: 0;
   display: grid;
-  gap: 24px;
+  gap: 12px;
   font-size: 16px;
   font-weight: 500;
   line-height: 1.16;
@@ -318,6 +337,7 @@ select {
   .headline-title {
     width: 100%;
     max-width: 740px;
+    line-height: 46px;
   }
   .preview {
     position: relative;
@@ -350,6 +370,7 @@ select {
   .strip::before {
     display: none;
   }
+  .strip-prev,
   .strip-next {
     display: none;
   }
@@ -373,7 +394,7 @@ select {
   }
   .meta {
     order: 2;
-    gap: 12px;
+    gap: 8px;
   }
   .contact {
     order: 3;
