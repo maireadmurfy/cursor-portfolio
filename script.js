@@ -1,18 +1,37 @@
 function initStrip() {
   const strip = document.querySelector("[data-strip]");
+  const prev = document.querySelector("[data-strip-prev]");
   const next = document.querySelector("[data-strip-next]");
-  if (!strip || !next) return;
+  if (!strip || !prev || !next) return;
   const mobileLayout = window.matchMedia("(max-width: 1100px)");
+  const previews = Array.from(strip.querySelectorAll(".preview"));
 
-  const syncStartInset = () => {
+  const syncStripState = () => {
     if (mobileLayout.matches) {
-      strip.classList.add("strip--no-start-inset");
+      prev.hidden = true;
+      next.hidden = true;
       return;
     }
 
     const atStart = strip.scrollLeft <= 0;
-    strip.classList.toggle("strip--no-start-inset", !atStart);
+    const maxScrollLeft = Math.max(0, strip.scrollWidth - strip.clientWidth);
+    const lastPreview = previews[previews.length - 1];
+    const stripRect = strip.getBoundingClientRect();
+    const lastPreviewRect = lastPreview?.getBoundingClientRect();
+    const lastPreviewInView =
+      !!lastPreviewRect && lastPreviewRect.right <= stripRect.right - 1;
+    const atEnd =
+      lastPreviewInView || maxScrollLeft <= 1 || strip.scrollLeft >= maxScrollLeft - 1;
+
+    prev.hidden = atStart;
+    next.hidden = atEnd;
   };
+
+  prev.addEventListener("click", () => {
+    if (mobileLayout.matches) return;
+    const amount = Math.max(320, Math.round(strip.clientWidth * 0.7));
+    strip.scrollBy({ left: -amount, behavior: "smooth" });
+  });
 
   next.addEventListener("click", () => {
     if (mobileLayout.matches) return;
@@ -32,9 +51,10 @@ function initStrip() {
     { passive: false }
   );
 
-  strip.addEventListener("scroll", syncStartInset, { passive: true });
-  window.addEventListener("resize", syncStartInset, { passive: true });
-  syncStartInset();
+  strip.addEventListener("scroll", syncStripState, { passive: true });
+  window.addEventListener("resize", syncStripState, { passive: true });
+
+  syncStripState();
 }
 
 function initVisiblePreviewPlayback() {
@@ -77,6 +97,9 @@ function initVisiblePreviewPlayback() {
       const timer = window.setTimeout(() => {
         playTimers.delete(video);
         if (!visibleVideos.has(video) || document.hidden) return;
+        if (video.ended) {
+          video.currentTime = 0;
+        }
         void video.play().catch(() => {});
       }, delay);
 
@@ -104,7 +127,9 @@ function initVisiblePreviewPlayback() {
           didChange = true;
         }
 
-        pauseVideo(video, entry.intersectionRatio <= resetThreshold);
+        if (entry.intersectionRatio <= resetThreshold) {
+          pauseVideo(video, true);
+        }
       });
 
       if (didChange) {
@@ -118,13 +143,17 @@ function initVisiblePreviewPlayback() {
   );
 
   videos.forEach((video) => {
-    pauseVideo(video, true);
+    pauseVideo(video);
+    video.currentTime = 0;
+    video.addEventListener("ended", () => {
+      clearPlayTimer(video);
+    });
     observer.observe(video);
   });
 
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
-      videos.forEach((video) => pauseVideo(video, false));
+      videos.forEach((video) => pauseVideo(video));
       return;
     }
 
