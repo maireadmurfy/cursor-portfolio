@@ -67,8 +67,9 @@ function initVisiblePreviewPlayback() {
 
   const visibleVideos = new Set();
   const playTimers = new Map();
-  const visibilityThreshold = 0.65;
-  const resetThreshold = 0.2;
+  const mobileLayout = window.matchMedia("(max-width: 1100px)");
+  const visibilityThreshold = mobileLayout.matches ? 0.35 : 0.65;
+  const resetThreshold = mobileLayout.matches ? 0.1 : 0.2;
   const cascadeDelayMs = 180;
 
   const clearPlayTimer = (video) => {
@@ -138,7 +139,9 @@ function initVisiblePreviewPlayback() {
     },
     {
       root: null,
-      threshold: [0, resetThreshold, visibilityThreshold, 0.9],
+      threshold: mobileLayout.matches
+        ? [0, 0.1, 0.25, 0.35, 0.5, 0.75]
+        : [0, resetThreshold, visibilityThreshold, 0.9],
     }
   );
 
