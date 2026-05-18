@@ -88,11 +88,12 @@ select {
 }
 
 .strip {
+  --strip-gap: 12px;
   position: absolute;
   inset: 0;
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: var(--strip-gap);
   padding: 0;
   overflow-x: auto;
   overflow-y: hidden;
@@ -110,8 +111,8 @@ select {
 
 .strip::after {
   content: "";
-  flex: 0 0 44px;
-  width: 44px;
+  flex: 0 0 var(--strip-gap);
+  width: var(--strip-gap);
   height: 1px;
 }
 
