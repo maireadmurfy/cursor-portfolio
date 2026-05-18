@@ -68,7 +68,7 @@ function initVisiblePreviewPlayback() {
   const visibleVideos = new Set();
   const playTimers = new Map();
   const mobileLayout = window.matchMedia("(max-width: 1100px)");
-  const visibilityThreshold = mobileLayout.matches ? 0.35 : 0.65;
+  const visibilityThreshold = mobileLayout.matches ? 0.2 : 0.65;
   const resetThreshold = mobileLayout.matches ? 0.1 : 0.2;
   const cascadeDelayMs = 180;
 
@@ -146,10 +146,19 @@ function initVisiblePreviewPlayback() {
   );
 
   videos.forEach((video) => {
+    if (mobileLayout.matches) {
+      video.preload = "auto";
+    }
+
     pauseVideo(video);
     video.currentTime = 0;
     video.addEventListener("ended", () => {
       clearPlayTimer(video);
+    });
+    video.addEventListener("loadeddata", () => {
+      if (visibleVideos.has(video) && video.paused && !video.ended) {
+        void video.play().catch(() => {});
+      }
     });
     observer.observe(video);
   });
